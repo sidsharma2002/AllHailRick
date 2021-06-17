@@ -5,18 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.celebtalks.R
 import com.example.celebtalks.other.Event
 import com.example.celebtalks.other.Resource
-import com.example.celebtalks.repositories.PostRepository
 import com.example.celebtalks.repositories.createPostRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.example.celebtalks.ui.snackbar
 
 @HiltViewModel
 class createPostViewModel @Inject constructor(

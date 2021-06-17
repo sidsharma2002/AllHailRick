@@ -9,6 +9,9 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+    <color name="reverseColorLight">#FF000000</color>
+    <color name="reverseColorDark">#FFFFFF</color>
+    <color name="hintcolor">#474747</color>
     <color name="stoneblue">#121C2B</color>
     <color name="pinkred">#F80063</color>
     <color name="black_shade1">#151515</color>

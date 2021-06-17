@@ -62,5 +62,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="post_uploadsuccess">the  Post has been successfully uploaded</string>
+    <string name="sample_postHeading">Coding Culture on Planet Earth</string>
 
 </resources>
