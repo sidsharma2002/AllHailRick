@@ -18,6 +18,8 @@ abstract class basePostViewModel (
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
 )  : ViewModel() {
 
+    abstract val posts: LiveData<Event<Resource<List<Post>>>>
+
     private val _likePostStatus = MutableLiveData<Event<Resource<Boolean>>>()
     val likePostStatus: LiveData<Event<Resource<Boolean>>> = _likePostStatus
 
@@ -52,4 +54,5 @@ abstract class basePostViewModel (
         }
     }
 
+    abstract fun getPosts(uid: String = "")
 }

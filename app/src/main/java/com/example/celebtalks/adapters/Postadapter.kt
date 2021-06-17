@@ -86,7 +86,8 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
 
             ibLike.setOnClickListener {
                 onLikeClickListener?.let { click ->
-                    click(post, holder.layoutPosition)
+                    if(!post.isLiking)
+                     click(post, holder.layoutPosition)
                 }
             }
             ibComments.setOnClickListener {
