@@ -12,10 +12,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.celebtalks.R
 import com.example.celebtalks.data.entities.Post
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
+
+
+// Inherited from RecyclerView Adapter
 
 class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
 
-    // TODO( "Remove use of findViewById and use base adapter" )
+    // TODO( "use base adapter" )
+    // PostViewHolder Class for optimisation
     class PostViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val tvPostAuthor : TextView = itemView.findViewById(R.id.tvPostAuthor)
         val tvPostText: TextView = itemView.findViewById(R.id.tvPostText)
@@ -24,7 +31,7 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
         val ibComments: ImageButton = itemView.findViewById(R.id.ibComments)
         val ibDeletePost: ImageButton = itemView.findViewById(R.id.ibDeletePost)
     }
-
+    // DiffUtil
     private val diffCallback = object : DiffUtil.ItemCallback<Post>() {
         override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
@@ -40,8 +47,8 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
         get() = differ.currentList
         set(value) = differ.submitList(value)
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+    // return PostViewHolder item which is made by passing itemView
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : PostViewHolder {
         return PostViewHolder(
             LayoutInflater.from(parent.context).inflate(
                 R.layout.item_post,
@@ -57,21 +64,27 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = posts[position]
+
         holder.apply {
             tvPostAuthor.text = post.authorUsername
             tvPostText.text = post.body
             val likeCount = post.likedBy.size
+
             tvLikedBy.text = when {
                 likeCount <= 0 -> "No likes"
                 likeCount == 1 -> "Liked by 1 person"
                 else -> "Liked by $likeCount people"
             }
+
             val uid = FirebaseAuth.getInstance().uid!!
+            // if post's ui is equal to uid of current user
+            // then show  Delete post button
             ibDeletePost.isVisible = uid == post.authorUid
+            // Change drawable according to liked status
             ibLike.setImageResource(if(post.isLiked) {
                 R.drawable.ic_baseline_check_circle_24
             } else R.drawable.ic_tickunchecked)
-
+            // Click Listeners
             tvPostAuthor.setOnClickListener {
                 onUserClickListener?.let { click ->
                     click(post.authorUid)
@@ -87,6 +100,7 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
             ibLike.setOnClickListener {
                 onLikeClickListener?.let { click ->
                     if(!post.isLiking)
+                        // Allow click only when isLiking is false
                      click(post, holder.layoutPosition)
                 }
             }

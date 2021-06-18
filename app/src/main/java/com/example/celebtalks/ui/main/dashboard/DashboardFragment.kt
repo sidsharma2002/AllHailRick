@@ -18,6 +18,7 @@ import com.example.celebtalks.ui.main.BasePostFragment
 import com.example.celebtalks.ui.main.basePostViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+// Inherit from BasePostFragment
 @AndroidEntryPoint
 class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
 
@@ -38,28 +39,35 @@ class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
             ViewModelProvider(this).get(DashboardViewModel::class.java)
          _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
         setupRecyclerView()
 
+        // when CreatePost Button is  clicked
         binding.btnGotoCreatePost.setOnClickListener {
                 findNavController().navigate(R.id.action_navigation_dashboard_to_createPostFragment)
         }
             return root
         }
 
-    override val postProgressBar: ProgressBar
+     override val postProgressBar : ProgressBar
+        // set ProgressBar equal to this progressbar
         get() = binding.allPostsProgressBar
 
     override val basePostViewModel: basePostViewModel
         get() {
+            // set ViewModel equal to this
             val vm: DashboardViewModel by viewModels()
             return vm
         }
 
+    // setup RecyclerView
     private fun setupRecyclerView()  = binding.rvAllPosts.apply{
         adapter = postAdapter
         layoutManager = LinearLayoutManager(requireContext())
+        // creates a glitch if item updates when not set to null
         itemAnimator = null
     }
+
 
     override fun onDestroyView() {
             super.onDestroyView()

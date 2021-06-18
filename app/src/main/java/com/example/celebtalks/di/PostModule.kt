@@ -1,5 +1,6 @@
 package com.example.celebtalks.di
 
+import com.example.celebtalks.adapters.Postadapter
 import com.example.celebtalks.repositories.createPostRepository
 import com.example.celebtalks.repositories.dealwithPostRepository
 import dagger.Module
@@ -19,4 +20,5 @@ object PostModule {
     @ViewModelScoped
     @Provides
     fun ProvidesdealwithPostRepository() = dealwithPostRepository()
+
 }
