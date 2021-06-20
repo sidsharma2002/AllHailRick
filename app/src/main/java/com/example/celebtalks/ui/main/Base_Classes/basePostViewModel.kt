@@ -1,4 +1,4 @@
-package com.example.celebtalks.ui.main
+package com.example.celebtalks.ui.main.Base_Classes
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,13 +8,13 @@ import com.example.celebtalks.data.entities.Post
 import com.example.celebtalks.data.entities.User
 import com.example.celebtalks.other.Event
 import com.example.celebtalks.other.Resource
-import com.example.celebtalks.repositories.dealwithPostRepository
+import com.example.celebtalks.repositories.basePostsRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-abstract class basePostViewModel (
-    private val repository: dealwithPostRepository ,
+abstract class basePostViewModel(
+    private val repository: basePostsRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
 )  : ViewModel() {
 

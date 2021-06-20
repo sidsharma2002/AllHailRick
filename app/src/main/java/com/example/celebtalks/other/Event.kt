@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer
 class Event <out T> (private  val content : T)  {
 
     private var hasBeenHandeled = false
-            private set
+    private set
 
      fun getContentIfnotHandled() : T ? {
             return if (!hasBeenHandeled){

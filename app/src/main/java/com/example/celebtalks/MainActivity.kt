@@ -23,10 +23,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // TODO(" implement toolbar code ")
 
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -38,22 +38,3 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 }
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.miLogout -> {
-//                FirebaseAuth.getInstance().signOut()
-//                Intent(this, AuthActivity::class.java).also {
-//                    startActivity(it)
-//                }
-//                finish()
-//            }
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
-//
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.mainactivity_menu, menu)
-//        return super.onCreateOptionsMenu(menu)
-//    }
-//}

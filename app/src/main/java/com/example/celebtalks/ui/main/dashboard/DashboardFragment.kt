@@ -5,17 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.celebtalks.R
 import com.example.celebtalks.databinding.FragmentDashboardBinding
-import com.example.celebtalks.ui.main.BasePostFragment
-import com.example.celebtalks.ui.main.basePostViewModel
+import com.example.celebtalks.ui.main.Base_Classes.BasePostFragment
+import com.example.celebtalks.ui.main.Base_Classes.basePostViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 // Inherit from BasePostFragment
@@ -39,7 +36,7 @@ class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
             ViewModelProvider(this).get(DashboardViewModel::class.java)
          _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
+        // Setup UI
         setupRecyclerView()
 
         // when CreatePost Button is  clicked
@@ -67,7 +64,6 @@ class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
         // creates a glitch if item updates when not set to null
         itemAnimator = null
     }
-
 
     override fun onDestroyView() {
             super.onDestroyView()

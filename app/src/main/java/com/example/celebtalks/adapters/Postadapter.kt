@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.celebtalks.R
 import com.example.celebtalks.data.entities.Post
 import com.google.firebase.auth.FirebaseAuth
+import dagger.Provides
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
 
 // Inherited from RecyclerView Adapter
-
 class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
 
     // TODO( "use base adapter" )

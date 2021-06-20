@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_explore">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_explore"
         android:name="com.example.celebtalks.ui.main.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
+        android:label="Explore"
         tools:layout="@layout/fragment_dashboard" >
         <action
             android:id="@+id/action_navigation_dashboard_to_createPostFragment"
@@ -22,13 +22,31 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.celebtalks.ui.main.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_profile"
+        android:name="com.example.celebtalks.ui.main.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
     <fragment
         android:id="@+id/createPostFragment"
         android:name="com.example.celebtalks.ui.main.CreatePost.CreatePostFragment"
         android:label="fragment_createpost"
         tools:layout="@layout/fragment_createpost" />
+
+    <fragment
+        android:id="@+id/othersProfileFragment"
+        android:name="com.example.celebtalks.ui.main.profile.OthersProfileFragment"
+        android:label="OthersProfileFragment" >
+        <argument
+            android:name="uid"
+            app:argType="string" />
+    </fragment>
+
+    <action android:id="@+id/action_globalActionToOthersProfileFragment"
+        app:destination="@+id/othersProfileFragment">
+    <argument
+        android:name="uid"
+        app:argType="string" />
+    </action>
+
 </navigation>

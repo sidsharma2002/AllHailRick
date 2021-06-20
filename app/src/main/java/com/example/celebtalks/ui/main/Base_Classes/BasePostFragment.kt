@@ -1,4 +1,4 @@
-package com.example.celebtalks.ui.main
+package com.example.celebtalks.ui.main.Base_Classes
 
 import android.os.Bundle
 import android.view.View
@@ -20,7 +20,7 @@ abstract class BasePostFragment(
     layoutId : Int
 ) : Fragment(layoutId) {
 
-    @Inject  lateinit var postAdapter: Postadapter
+    @Inject  lateinit var postAdapter : Postadapter
     // abstract variables
     protected abstract val postProgressBar: ProgressBar
     protected abstract val basePostViewModel: basePostViewModel
