@@ -1,6 +1,7 @@
 package com.example.celebtalks.ui.main.Base_Classes
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.core.view.isVisible
@@ -51,7 +52,7 @@ abstract class BasePostFragment(
 
     // Code which would be same everywhere in the class which inherits from it
       private fun subscribeToObservers() {
-
+        Log.d("basepost-Fragment : ", "subscribeToObservers: ")
           // Observe like post status
           basePostViewModel.likePostStatus.observe(viewLifecycleOwner, EventObserver(
               onError = {
@@ -68,11 +69,13 @@ abstract class BasePostFragment(
                   }
               }
           ) { isLiked ->
+              Log.d("basepost fragment : ", " onSuccess of likepoststatus ")
               curLikedIndex?.let { index ->
                   val uid = FirebaseAuth.getInstance().uid!!
                   // change post liked by and liked at post[index]
                   postAdapter.posts[index].apply {
                       this.isLiked = isLiked
+                      isLiking = false
                       if(isLiked) {
                           likedBy += uid
                       } else {
@@ -93,6 +96,7 @@ abstract class BasePostFragment(
          // Observe Posts
           basePostViewModel.posts.observe(viewLifecycleOwner, EventObserver(
             onError = {
+                Log.d("basepost fragment : ", " error in post.observe")
                 postProgressBar.isVisible = false
                 snackbar(it)
             },
@@ -100,6 +104,8 @@ abstract class BasePostFragment(
                 postProgressBar.isVisible = true
             }
         ) { posts ->
+              Log.d("basepost fragment : ", " onSuccess ")
+              Log.d("basepost fragment", posts.size.toString())
             postProgressBar.isVisible = false
             postAdapter.posts = posts
         })

@@ -1,5 +1,6 @@
 package com.example.celebtalks.ui.main.profile
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -34,6 +35,7 @@ class ProfileViewModel  @Inject constructor(
 
     // Functions to perform tasks
     override fun getPosts(uid: String) {
+        Log.d("ProfileViewModel : ", " get Posts fun is called")
         _posts.postValue(Event(Resource.Loading()))
         viewModelScope.launch(dispatcher) {
             val result = repository.getPostsForProfile(uid)
@@ -52,6 +54,7 @@ class ProfileViewModel  @Inject constructor(
         fun loadProfile(uid: String) {
             _profileMeta.postValue(Event(Resource.Loading()))
             viewModelScope.launch(dispatcher) {
+                Log.d("ProfileViewModel : ", " loadProfile is called  ")
                 val result = repository.getUser(uid)
                 _profileMeta.postValue(Event(result))
             }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_explore">
+    app:startDestination="@+id/navigation_dashboard">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -12,14 +12,12 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_explore"
+        android:id="@+id/navigation_dashboard"
         android:name="com.example.celebtalks.ui.main.dashboard.DashboardFragment"
         android:label="Explore"
         tools:layout="@layout/fragment_dashboard" >
-        <action
-            android:id="@+id/action_navigation_dashboard_to_createPostFragment"
-            app:destination="@id/createPostFragment" />
     </fragment>
+
 
     <fragment
         android:id="@+id/navigation_profile"
@@ -42,11 +40,21 @@
             app:argType="string" />
     </fragment>
 
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.celebtalks.ui.main.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+
     <action android:id="@+id/action_globalActionToOthersProfileFragment"
         app:destination="@+id/othersProfileFragment">
     <argument
         android:name="uid"
         app:argType="string" />
     </action>
-
+    <action
+        android:id="@+id/action_globalActionToCreatePostFragment"
+        app:destination="@id/createPostFragment" />
+    <action android:id="@+id/action_globalActionToSearchFragment"
+        app:destination="@+id/searchFragment"/>
 </navigation>

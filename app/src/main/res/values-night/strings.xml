@@ -17,7 +17,7 @@
     <string name="your_profile">Your Profile</string>
     <string name="example_post_text">Today is a good day to make a post in this social network, this is actually just an example text I write to have some lines of text</string>
     <string name="example_post_username">Philipp</string>
-    <string name="search_hint">Search…</string>
+    <string name="search_hint">search</string>
     <string name="posts">Posts</string>
     <string name="logout">Logout</string>
     <string name="email">E-Mail</string>

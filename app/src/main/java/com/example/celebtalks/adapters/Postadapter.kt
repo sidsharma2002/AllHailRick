@@ -1,5 +1,6 @@
 package com.example.celebtalks.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
         val tvPostAuthor : TextView = itemView.findViewById(R.id.tvPostAuthor)
         val tvPostText: TextView = itemView.findViewById(R.id.tvPostText)
         val tvLikedBy: TextView = itemView.findViewById(R.id.tvLikedBy)
+        val tvPostHeading : TextView = itemView.findViewById(R.id.tvPostHeading)
         val ibLike: ImageButton = itemView.findViewById(R.id.ibLike)
         val ibComments: ImageButton = itemView.findViewById(R.id.ibComments)
         val ibDeletePost: ImageButton = itemView.findViewById(R.id.ibDeletePost)
@@ -49,6 +51,7 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
 
     // return PostViewHolder item which is made by passing itemView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : PostViewHolder {
+        Log.d("ProfileAdapter : ", "in onCreateViewHolder ")
         return PostViewHolder(
             LayoutInflater.from(parent.context).inflate(
                 R.layout.item_post,
@@ -59,15 +62,17 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
     }
 
     override fun getItemCount(): Int {
+        Log.d("ProfileAdapter postsize is  : ", posts.size.toString() )
         return posts.size
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = posts[position]
-
+        Log.d("ProfileAdapter : ", "in onBindViewHolder ")
         holder.apply {
             tvPostAuthor.text = post.authorUsername
             tvPostText.text = post.body
+            tvPostHeading.text = post.heading
             val likeCount = post.likedBy.size
 
             tvLikedBy.text = when {

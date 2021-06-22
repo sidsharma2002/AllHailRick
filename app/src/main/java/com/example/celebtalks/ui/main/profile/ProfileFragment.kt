@@ -1,6 +1,7 @@
 package com.example.celebtalks.ui.main.profile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,47 +29,6 @@ open class ProfileFragment : BasePostFragment(R.id.fragment_profile) {
     // onDestroyView.
       val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        profileViewModel =
-            ViewModelProvider(this).get(ProfileViewModel::class.java)
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        setupRecyclerView()
-        subscribeToObservers()
-
-        binding.btnToggleFollow.isVisible = false
-
-        return root
-    }
-
-    private fun setupRecyclerView() = binding.rvPosts.apply {
-        adapter = postAdapter
-        itemAnimator = null
-        layoutManager = LinearLayoutManager(requireContext())
-    }
-
-    private fun subscribeToObservers() {
-        viewModel.profileMeta.observe(viewLifecycleOwner, EventObserver(
-            onError = {
-                binding.profileMetaProgressBar.isVisible = false
-                snackbar(it)
-            },
-            onLoading = { binding.profileMetaProgressBar.isVisible = true }
-        ) { user ->
-            binding.profileMetaProgressBar.isVisible = false
-            binding.tvUsername.text = user.username
-            binding.tvProfileDescription.text = if(user.description.isEmpty()) {
-                requireContext().getString(R.string.no_description)
-            } else user.description
-        })
-    }
-
-
     override val postProgressBar : ProgressBar
         // set ProgressBar equal to this progressbar
         get() = binding.profileMetaProgressBar
@@ -85,6 +45,53 @@ open class ProfileFragment : BasePostFragment(R.id.fragment_profile) {
 
     protected open val uid: String
         get() = FirebaseAuth.getInstance().uid!!
+
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        profileViewModel =
+            ViewModelProvider(this).get(ProfileViewModel::class.java)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+
+        setupRecyclerView()
+        subscribeToObservers()
+
+        binding.btnToggleFollow.isVisible = false
+        viewModel.loadProfile(uid)
+
+        return root
+    }
+
+    private fun setupRecyclerView() = binding.rvPosts.apply {
+        adapter = postAdapter
+        itemAnimator = null
+        layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun subscribeToObservers() {
+        Log.d("ProfileFragment : ", "subscribeToObservers: ")
+        viewModel.profileMeta.observe(viewLifecycleOwner, EventObserver(
+            onError = {
+                binding.profileMetaProgressBar.isVisible = false
+                snackbar(it)
+            },
+            onLoading = { binding.profileMetaProgressBar.isVisible = true }
+        ) { user ->
+            Log.d("Log message ", "in on success ")
+            binding.profileMetaProgressBar.isVisible = false
+            binding.tvUsername.text = user.username
+            Log.d("username after setting is ", binding.tvUsername.text.toString())
+            binding.tvProfileDescription.text = if(user.description.isEmpty()) {
+                requireContext().getString(R.string.no_description)
+            } else user.description
+        })
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -1,5 +1,6 @@
 package com.example.celebtalks.repositories
 
+import android.util.Log
 import com.example.celebtalks.data.entities.Post
 import com.example.celebtalks.data.entities.User
 import com.example.celebtalks.other.Resource
@@ -26,6 +27,7 @@ class basePostsRepository {
 
     suspend fun getPostsForProfile(uid: String) = withContext(Dispatchers.IO) {
         safeCall {
+            Log.d(" basePostRepository ", " getPostsForProfile is called  ")
             // get Posts where authorUid is equal to uid
             val profilePosts = posts.whereEqualTo("authorUid", uid)
                 .orderBy("date", Query.Direction.DESCENDING)
@@ -33,7 +35,9 @@ class basePostsRepository {
                 .await()
                 .toObjects(Post::class.java)
                 .onEach { post ->
+                    Log.d(" basepostRepository : getPostforProfile ", post.authorUid)
                     val user = getUser(post.authorUid).data!!
+                    Log.d(" basepostRepository : getPostforProfile ", user.username)
                     post.authorUsername = user.username
                     post.isLiked = uid in post.likedBy
                 }
@@ -126,12 +130,18 @@ class basePostsRepository {
 
     suspend fun getUser(uid: String) = withContext(Dispatchers.IO) {
         safeCall {
+            Log.d(" basePostRepository ", "getUser is called  ")
+            val currentUid = FirebaseAuth.getInstance().uid!!
+            Log.d(" basePostRepository ", "uid of current user is  :  $currentUid")
+
+            //TODO(" error occuring here")
             val user = users.document(uid).get().await().toObject(User::class.java)
                 ?: throw IllegalStateException()
-            val currentUid = FirebaseAuth.getInstance().uid!!
+            Log.d(" basePostRepository ", " In getUser: user is " + user.username)
             val currentUser = users.document(currentUid).get().await().toObject(User::class.java)
                 ?: throw IllegalStateException()
             user.isfollowing = uid in currentUser.follows
+            Log.d("basePostRepository ", "user is " + user.username + " current user is " + currentUser.username)
             Resource.Success(user)
         }
     }

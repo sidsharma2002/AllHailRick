@@ -36,17 +36,23 @@ class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
             ViewModelProvider(this).get(DashboardViewModel::class.java)
          _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
         // Setup UI
         setupRecyclerView()
-
         // when CreatePost Button is  clicked
-        binding.btnGotoCreatePost.setOnClickListener {
-                findNavController().navigate(R.id.action_navigation_dashboard_to_createPostFragment)
-        }
-            return root
+        setupClickListeners()
+
+        return root
         }
 
-     override val postProgressBar : ProgressBar
+    private fun setupClickListeners() {
+        // searchbar ClickListener
+        binding.cardSearch.setOnClickListener {
+            findNavController().navigate(R.id.action_globalActionToSearchFragment)
+        }
+    }
+
+    override val postProgressBar : ProgressBar
         // set ProgressBar equal to this progressbar
         get() = binding.allPostsProgressBar
 

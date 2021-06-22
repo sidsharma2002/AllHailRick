@@ -4,36 +4,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorOnSecondary"
     xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:background="?attr/colorOnSecondary">
+        android:background="?attr/colorOnSecondary"
+        app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/main_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="Cockpit"
+                android:visibility="visible"
+                app:title=" "
                 app:contentInsetStart="26sp"
-                app:titleTextAppearance="@style/Toolbar.TitleText"
+                app:titleTextAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
                 app:layout_behavior="scroll|enterAlways|snap">
             </androidx.appcompat.widget.Toolbar>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/day_indicators"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="20sp"
-            android:layout_marginEnd="30sp"
-            android:orientation="horizontal"
-            android:padding="10sp"
-            android:visibility="gone"
-            app:layoutManager="LinearLayoutManager"
-            tools:itemCount="3" />
     </com.google.android.material.appbar.AppBarLayout>
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,7 +35,7 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
-        app:elevation="10sp"
+        android:elevation="20sp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
