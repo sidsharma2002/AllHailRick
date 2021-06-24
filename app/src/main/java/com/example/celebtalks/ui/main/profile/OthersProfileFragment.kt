@@ -1,6 +1,7 @@
 package com.example.celebtalks.ui.main.profile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
@@ -25,13 +26,25 @@ class OthersProfileFragment : ProfileFragment() {
 
     private fun subscribeToObservers(){
         viewModel.profileMeta.observe(viewLifecycleOwner, EventObserver{
-                binding.btnToggleFollow.isVisible = true
+            Log.d("OtherProfileFragment ", "subscribeToObservers: ")
+            binding.btnToggleFollow.isVisible = true
             // TODO(" Try this transition when app is running ")
             // setupToggleFollowButton(it)
                 curUser = it
+                binding.btnToggleFollow.text = when(curUser?.isfollowing){
+                    true->"unfollow"
+                    false->"follow"
+                    else -> null
+                }
         })
+
         viewModel.followStatus.observe(viewLifecycleOwner, EventObserver {
+            Log.d("OtherProfileFrag : ", "followstatus is  $it")
             curUser?.isfollowing = it
+            binding.btnToggleFollow.text = when (it) {
+                true -> "unfollow"
+                false -> "follow"
+            }
         })
     }
 }

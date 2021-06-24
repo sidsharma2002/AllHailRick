@@ -46,6 +46,7 @@ abstract class basePostViewModel(
         }
     }
 
+
     fun deletePost(post: Post) {
         _deletePostStatus.postValue(Event(Resource.Loading()))
         viewModelScope.launch(dispatcher) {

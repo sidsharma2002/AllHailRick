@@ -30,7 +30,6 @@ abstract class BasePostFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         subscribeToObservers()
 
         // When Post is clicked
@@ -47,12 +46,11 @@ abstract class BasePostFragment(
                     }
             }.show(childFragmentManager , null)
         }
-
      }
 
-    // Code which would be same everywhere in the class which inherits from it
+    // This code would be same everywhere in the class which inherits from it
       private fun subscribeToObservers() {
-        Log.d("basepost-Fragment : ", "subscribeToObservers: ")
+        Log.d("Basepost Fragment : ", "subscribeToObservers: ")
           // Observe like post status
           basePostViewModel.likePostStatus.observe(viewLifecycleOwner, EventObserver(
               onError = {
@@ -105,9 +103,9 @@ abstract class BasePostFragment(
             }
         ) { posts ->
               Log.d("basepost fragment : ", " onSuccess ")
-              Log.d("basepost fragment", posts.size.toString())
-            postProgressBar.isVisible = false
-            postAdapter.posts = posts
+              postProgressBar.isVisible = false
+              // set List<Post> in adapter
+              postAdapter.posts = posts
         })
     }
 }

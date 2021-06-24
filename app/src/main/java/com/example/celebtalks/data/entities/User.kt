@@ -9,6 +9,5 @@ data class User(
         val username : String = "",
         var follows : List<String> = listOf() ,
         val description : String = "",
-        @Exclude
-        var isfollowing : Boolean = false
+        @get: Exclude  var isfollowing : Boolean = false
 )

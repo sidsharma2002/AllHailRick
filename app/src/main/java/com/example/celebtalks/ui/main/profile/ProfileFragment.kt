@@ -47,7 +47,6 @@ open class ProfileFragment : BasePostFragment(R.id.fragment_profile) {
         get() = FirebaseAuth.getInstance().uid!!
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

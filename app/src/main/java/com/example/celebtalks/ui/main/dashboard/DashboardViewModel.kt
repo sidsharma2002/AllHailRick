@@ -22,7 +22,7 @@ class DashboardViewModel @Inject constructor(
 
     private val _posts = MutableLiveData<Event<Resource<List<Post>>>>()
     override val posts: LiveData<Event<Resource<List<Post>>>>
-        get() = _posts
+    get() = _posts
 
     init {
         getPosts()
@@ -35,5 +35,4 @@ class DashboardViewModel @Inject constructor(
             _posts.postValue(Event(result))
         }
     }
-
 }

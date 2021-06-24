@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.widget.NestedScrollView
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.main.dashboard.DashboardFragment"
@@ -9,16 +9,20 @@
     android:layout_height="match_parent"
     android:id="@+id/fragment_dashboard">
 
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <TextView
         android:id="@+id/tvExplore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserratextrabold"
         android:text="EXPLORE"
-        android:textSize="22sp"
+        android:textSize="18sp"
         android:layout_margin="12sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="?attr/colorOnPrimary"
+        android:textColor="@color/hintcolor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,7 +59,7 @@
         android:id="@+id/cardSearch"
         android:layout_width="match_parent"
         android:layout_height="36sp"
-        android:layout_marginTop="20sp"
+        android:layout_marginTop="24sp"
         android:layout_marginStart="12sp"
         android:layout_marginEnd="56sp"
         app:cardBackgroundColor="@color/black"
@@ -82,18 +86,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tvspacelogs" />
 
     <TextView
-        android:id="@+id/tvTextJutsu"
+        android:id="@+id/tvspacelogs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserratextrabold"
         android:text="SPACE LOGS"
-        android:textSize="22sp"
-        android:layout_margin="12sp"
+        android:textSize="18sp"
+        android:layout_marginStart="12sp"
+        android:layout_marginTop="60sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="?attr/colorOnPrimary"
+        android:textColor="@color/hintcolor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardSearch" />
 
@@ -102,27 +107,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:minHeight="60sp"
+        android:minHeight="20sp"
         android:paddingBottom="50dp"
-        android:layout_marginTop="20sp"
+        android:layout_marginTop="24sp"
+        android:layout_marginBottom="100sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTextJutsu" />
+        android:nestedScrollingEnabled="false"
+        app:layout_constraintTop_toBottomOf="@id/tvspacelogs" />
 
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/btnGotoCreatePost"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginEnd="28dp"-->
-<!--        android:layout_marginBottom="70sp"-->
-<!--        android:clickable="true"-->
-<!--        android:tint="@color/white"-->
-<!--        app:backgroundTintMode="src_over"-->
-<!--        app:backgroundTint="?attr/colorPrimary"-->
-<!--        android:src="@drawable/ic_baseline_add_comment_24"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        android:contentDescription="create post"-->
-<!--        android:focusable="true" />-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

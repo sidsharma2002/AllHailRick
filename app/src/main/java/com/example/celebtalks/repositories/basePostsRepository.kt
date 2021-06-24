@@ -37,9 +37,12 @@ class basePostsRepository {
                 .onEach { post ->
                     Log.d(" basepostRepository : getPostforProfile ", post.authorUid)
                     val user = getUser(post.authorUid).data!!
-                    Log.d(" basepostRepository : getPostforProfile ", user.username)
                     post.authorUsername = user.username
-                    post.isLiked = uid in post.likedBy
+                    val  isLiked_init = post.likedBy.find { item -> item == uid}
+                    post.isLiked = when (isLiked_init) {
+                        null -> false
+                        else -> true
+                    }
                 }
             Resource.Success(profilePosts)
         }
@@ -66,6 +69,11 @@ class basePostsRepository {
                 .onEach { post ->
                     val user = getUser(post.authorUid).data!!
                     post.authorUsername = user.username
+                    val  isLiked_init = post.likedBy.find { item -> item == uid}
+                    post.isLiked = when (isLiked_init) {
+                        null -> false
+                        else -> true
+                    }
                 }
             Resource.Success(allPosts)
         }
@@ -107,7 +115,7 @@ class basePostsRepository {
         }
     }
 
-     suspend fun deletePost(post: Post) = withContext(Dispatchers.IO) {
+    suspend fun deletePost(post: Post) = withContext(Dispatchers.IO) {
         safeCall {
             posts.document(post.id).delete().await()
             Resource.Success(post)
@@ -127,21 +135,18 @@ class basePostsRepository {
         }
     }
 
-
     suspend fun getUser(uid: String) = withContext(Dispatchers.IO) {
         safeCall {
-            Log.d(" basePostRepository ", "getUser is called  ")
             val currentUid = FirebaseAuth.getInstance().uid!!
-            Log.d(" basePostRepository ", "uid of current user is  :  $currentUid")
-
-            //TODO(" error occuring here")
             val user = users.document(uid).get().await().toObject(User::class.java)
                 ?: throw IllegalStateException()
-            Log.d(" basePostRepository ", " In getUser: user is " + user.username)
             val currentUser = users.document(currentUid).get().await().toObject(User::class.java)
                 ?: throw IllegalStateException()
-            user.isfollowing = uid in currentUser.follows
-            Log.d("basePostRepository ", "user is " + user.username + " current user is " + currentUser.username)
+            val  isfollowed_init = currentUser.follows.find { item -> item == uid}
+            user.isfollowing = when (isfollowed_init) {
+                null -> false
+                else -> true
+            }
             Resource.Success(user)
         }
     }

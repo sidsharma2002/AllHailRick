@@ -8,11 +8,14 @@ import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.celebtalks.R
 import com.example.celebtalks.databinding.FragmentDashboardBinding
 import com.example.celebtalks.ui.main.Base_Classes.BasePostFragment
 import com.example.celebtalks.ui.main.Base_Classes.basePostViewModel
+import com.example.celebtalks.utils.SwipeToDeleteCallback
 import dagger.hilt.android.AndroidEntryPoint
 
 // Inherit from BasePostFragment
@@ -21,6 +24,7 @@ class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
 
     private lateinit var dashboardViewModel: DashboardViewModel
     private var _binding: FragmentDashboardBinding? = null
+    private lateinit var itemTouchHelper: ItemTouchHelper
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -36,12 +40,10 @@ class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
             ViewModelProvider(this).get(DashboardViewModel::class.java)
          _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        // Setup UI
+        // setup UI
         setupRecyclerView()
         // when CreatePost Button is  clicked
         setupClickListeners()
-
         return root
         }
 
@@ -53,12 +55,10 @@ class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
     }
 
     override val postProgressBar : ProgressBar
-        // set ProgressBar equal to this progressbar
-        get() = binding.allPostsProgressBar
+    get() = binding.allPostsProgressBar
 
     override val basePostViewModel: basePostViewModel
         get() {
-            // set ViewModel equal to this
             val vm: DashboardViewModel by viewModels()
             return vm
         }

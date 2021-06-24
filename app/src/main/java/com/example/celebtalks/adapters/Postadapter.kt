@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -19,7 +20,6 @@ import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
 
-// Inherited from RecyclerView Adapter
 class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
 
     // TODO( "use base adapter" )
@@ -32,6 +32,8 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
         val ibLike: ImageButton = itemView.findViewById(R.id.ibLike)
         val ibComments: ImageButton = itemView.findViewById(R.id.ibComments)
         val ibDeletePost: ImageButton = itemView.findViewById(R.id.ibDeletePost)
+        val cvitemPost : View = itemView.findViewById(R.id.item_post)
+        val shapeisLiked : View = itemView.findViewById(R.id.shape_liked)
     }
     // DiffUtil
     private val diffCallback = object : DiffUtil.ItemCallback<Post>() {
@@ -86,9 +88,8 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
             // then show  Delete post button
             ibDeletePost.isVisible = uid == post.authorUid
             // Change drawable according to liked status
-            ibLike.setImageResource(if(post.isLiked) {
-                R.drawable.ic_baseline_check_circle_24
-            } else R.drawable.ic_tickunchecked)
+            shapeisLiked.isVisible = post.isLiked == true
+
             // Click Listeners
             tvPostAuthor.setOnClickListener {
                 onUserClickListener?.let { click ->
@@ -102,13 +103,15 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
                 }
             }
 
-            ibLike.setOnClickListener {
+            cvitemPost.setOnLongClickListener{
                 onLikeClickListener?.let { click ->
                     if(!post.isLiking)
                         // Allow click only when isLiking is false
                      click(post, holder.layoutPosition)
                 }
+                true
             }
+
             ibComments.setOnClickListener {
                 onCommentsClickListener?.let { click ->
                     click(post)
@@ -147,4 +150,11 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
     fun setOnCommentsClickListener(listener: (Post) -> Unit) {
         onCommentsClickListener = listener
     }
+
+    fun onSwiped(pos: Int){
+        onDeletePostClickListener?.let { click ->
+            click(posts[pos])
+        }
+    }
+
 }

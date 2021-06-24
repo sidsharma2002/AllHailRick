@@ -16,5 +16,6 @@
     <color name="pinkred">#F80063</color>
     <color name="black_dark">#121213</color>
     <color name="black_light">#2B2A2F</color>
+    <color name = "bg_dark">#1E1F22</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
