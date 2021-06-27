@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
             setOnNavigationItemReselectedListener { Unit }
         }
         navView.setupWithNavController(navController)
+
     }
 
     @Override
@@ -75,7 +76,6 @@ class MainActivity : AppCompatActivity() {
                     navHostFragment.findNavController().navigate(R.id.action_globalActionToCreatePostFragment)
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }

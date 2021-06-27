@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -14,10 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.celebtalks.R
 import com.example.celebtalks.data.entities.Post
 import com.google.firebase.auth.FirebaseAuth
-import dagger.Provides
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.scopes.ViewModelScoped
-import javax.inject.Inject
 
 
 class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
@@ -25,15 +20,15 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
     // TODO( "use base adapter" )
     // PostViewHolder Class for optimisation
     class PostViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        val tvPostAuthor : TextView = itemView.findViewById(R.id.tvPostAuthor)
         val tvPostText: TextView = itemView.findViewById(R.id.tvPostText)
-        val tvLikedBy: TextView = itemView.findViewById(R.id.tvLikedBy)
-        val tvPostHeading : TextView = itemView.findViewById(R.id.tvPostHeading)
+        val tvLikedBy: TextView = itemView.findViewById(R.id.tvLikedBy_detail)
+        val tvPostHeading : TextView = itemView.findViewById(R.id.tvPostHeading_detail)
         val ibLike: ImageButton = itemView.findViewById(R.id.ibLike)
         val ibComments: ImageButton = itemView.findViewById(R.id.ibComments)
         val ibDeletePost: ImageButton = itemView.findViewById(R.id.ibDeletePost)
         val cvitemPost : View = itemView.findViewById(R.id.item_post)
         val shapeisLiked : View = itemView.findViewById(R.id.shape_liked)
+        val viewtype : TextView = itemView.findViewById(R.id.view_type)
     }
     // DiffUtil
     private val diffCallback = object : DiffUtil.ItemCallback<Post>() {
@@ -72,7 +67,6 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
         val post = posts[position]
         Log.d("ProfileAdapter : ", "in onBindViewHolder ")
         holder.apply {
-            tvPostAuthor.text = post.authorUsername
             tvPostText.text = post.body
             tvPostHeading.text = post.heading
             val likeCount = post.likedBy.size
@@ -88,14 +82,13 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
             // then show  Delete post button
             ibDeletePost.isVisible = uid == post.authorUid
             // Change drawable according to liked status
-            shapeisLiked.isVisible = post.isLiked == true
-
-            // Click Listeners
-            tvPostAuthor.setOnClickListener {
-                onUserClickListener?.let { click ->
-                    click(post.authorUid)
-                }
+            shapeisLiked.visibility = when(post.isLiked){
+                true -> View.VISIBLE
+                else -> View.GONE
             }
+
+            Log.d("PostAdapter : ", "post.isLiked for  "  + post.heading + " is " +  post.isLiked.toString())
+            Log.d("PostAdapter : ", "shapeVisiblestatus  for " + post.heading + " is " + shapeisLiked.isVisible.toString())
 
             tvLikedBy.setOnClickListener {
                 onLikedByClickListener?.let { click ->
@@ -110,6 +103,12 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
                      click(post, holder.layoutPosition)
                 }
                 true
+            }
+
+            cvitemPost.setOnClickListener {
+                onPostClickListener?.let { click ->
+                    click(Unit)
+                }
             }
 
             ibComments.setOnClickListener {
@@ -130,6 +129,7 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
     private var onDeletePostClickListener: ((Post) -> Unit)? = null
     private var onLikedByClickListener: ((Post) -> Unit)? = null
     private var onCommentsClickListener: ((Post) -> Unit)? = null
+    private var onPostClickListener: ((Unit) -> Unit)? = null
 
     fun setOnLikeClickListener(listener: (Post, Int) -> Unit) {
         onLikeClickListener = listener
@@ -151,10 +151,8 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
         onCommentsClickListener = listener
     }
 
-    fun onSwiped(pos: Int){
-        onDeletePostClickListener?.let { click ->
-            click(posts[pos])
-        }
+    fun setOnPostClickListener(listener: (Unit) -> Unit) {
+        onPostClickListener = listener
     }
 
 }

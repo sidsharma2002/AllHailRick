@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.core.widget.NestedScrollView
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.main.dashboard.DashboardFragment"
@@ -8,6 +8,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_dashboard">
+
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -19,7 +23,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserratextrabold"
         android:text="EXPLORE"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:layout_margin="12sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/hintcolor"
@@ -88,19 +92,46 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvspacelogs" />
 
+    <View
+        app:layout_constraintTop_toBottomOf="@id/cardSearch"
+        app:layout_constraintBottom_toTopOf="@id/tvspacelogs"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="?android:attr/listDivider"/>
+
     <TextView
         android:id="@+id/tvspacelogs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserratextrabold"
         android:text="SPACE LOGS"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:layout_marginStart="12sp"
         android:layout_marginTop="60sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/hintcolor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardSearch" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/view_allcaughtup"
+        android:layout_width="match_parent"
+        android:layout_height="100sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/tvspacelogs"
+        app:layout_constraintBottom_toTopOf="@id/rvAllPosts" >
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="You are all caught up!"
+           android:textSize="16sp"
+           android:fontFamily="@font/opensansregular"
+           android:textColor="@color/hintcolor"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAllPosts"
@@ -109,14 +140,21 @@
         android:clipToPadding="false"
         android:minHeight="20sp"
         android:paddingBottom="50dp"
-        android:layout_marginTop="24sp"
-        android:layout_marginBottom="100sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginBottom="0sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         android:nestedScrollingEnabled="false"
-        app:layout_constraintTop_toBottomOf="@id/tvspacelogs" />
+        app:layout_constraintTop_toBottomOf="@id/view_allcaughtup"
+        app:layout_constraintBottom_toTopOf="@id/view_extraspace"/>
 
-
+<TextView
+    android:id="@+id/view_extraspace"
+    android:layout_width="match_parent"
+    android:layout_height="60sp"
+    app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.core.widget.NestedScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

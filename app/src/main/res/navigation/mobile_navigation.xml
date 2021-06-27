@@ -57,4 +57,13 @@
         app:destination="@id/createPostFragment" />
     <action android:id="@+id/action_globalActionToSearchFragment"
         app:destination="@+id/searchFragment"/>
+
+    <dialog
+        android:id="@+id/PostDetailFragment"
+        android:name="com.example.celebtalks.ui.main.PostDetail.PostDetailFragment"
+        android:label="fragment_postdetail"
+        tools:layout="@layout/fragment_postdetail" />
+    <action android:id="@+id/action_globalActionToPostDetailFragment"
+        app:destination="@+id/PostDetailFragment"/>
+
 </navigation>

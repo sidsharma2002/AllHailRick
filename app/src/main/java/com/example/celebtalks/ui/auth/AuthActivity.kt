@@ -22,7 +22,7 @@ class AuthActivity : AppCompatActivity() {
                         finish()
                 }
         }
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         setContentView(R.layout.activity_auth)
     }
 }

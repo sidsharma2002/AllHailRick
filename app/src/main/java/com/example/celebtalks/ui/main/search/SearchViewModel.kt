@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.celebtalks.data.entities.User
 import com.example.celebtalks.other.Event
 import com.example.celebtalks.other.Resource
-import com.example.celebtalks.repositories.ProfileRepository
 import com.example.celebtalks.repositories.basePostsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher

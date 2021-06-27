@@ -1,22 +1,33 @@
 package com.example.celebtalks.ui.main.dashboard
 
+import android.app.ProgressDialog.show
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.SimpleAdapter
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.celebtalks.R
 import com.example.celebtalks.databinding.FragmentDashboardBinding
+import com.example.celebtalks.other.EventObserver
 import com.example.celebtalks.ui.main.Base_Classes.BasePostFragment
 import com.example.celebtalks.ui.main.Base_Classes.basePostViewModel
+import com.example.celebtalks.ui.main.PostDetail.PostDetailFragment
+import com.example.celebtalks.ui.snackbar
 import com.example.celebtalks.utils.SwipeToDeleteCallback
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 // Inherit from BasePostFragment
 @AndroidEntryPoint
@@ -28,7 +39,23 @@ class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
 
     // This property is only valid between onCreateView and
     // onDestroyView.
-    private val binding get() = _binding!!
+    private val binding
+    get() = _binding!!
+
+    override val swipeRefreshLayout: SwipeRefreshLayout
+        get() = binding.fragmentDashboard
+
+    override val postProgressBar : ProgressBar
+        get() = binding.allPostsProgressBar
+
+    override val basePostViewModel: basePostViewModel
+        get() {
+            val vm: DashboardViewModel by viewModels()
+            return vm
+        }
+
+    override val allCaughtupView: ConstraintLayout
+        get() = binding.viewAllcaughtup
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +67,7 @@ class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
             ViewModelProvider(this).get(DashboardViewModel::class.java)
          _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        // setup UI
+        // setup RecyclerView and onSwipeListeners
         setupRecyclerView()
         // when CreatePost Button is  clicked
         setupClickListeners()
@@ -54,26 +81,26 @@ class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
         }
     }
 
-    override val postProgressBar : ProgressBar
-    get() = binding.allPostsProgressBar
-
-    override val basePostViewModel: basePostViewModel
-        get() {
-            val vm: DashboardViewModel by viewModels()
-            return vm
-        }
-
     // setup RecyclerView
     private fun setupRecyclerView()  = binding.rvAllPosts.apply{
         adapter = postAdapter
         layoutManager = LinearLayoutManager(requireContext())
         // creates a glitch if item updates when not set to null
         itemAnimator = null
+
+        // Test feature
+        val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            }
+        }
+        itemTouchHelper = ItemTouchHelper(swipeHandler)
+        // uncomment this for swipe feature
+        // itemTouchHelper.attachToRecyclerView(this)
     }
 
     override fun onDestroyView() {
             super.onDestroyView()
             _binding = null
         }
-
     }
+

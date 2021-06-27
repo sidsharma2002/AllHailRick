@@ -44,7 +44,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         binding.btnRegister.setOnClickListener {
                viewmodel.register(
                 binding.etEmail.text.toString(),
-                binding.etUsername.text.toString(),
+                binding.etType.text.toString(),
+                binding.etPlanet.text.toString(),
                 binding.etPassword.text.toString(),
                 binding.etRepeatPassword.text.toString()
             )
@@ -80,12 +81,5 @@ private fun subscribeToObserver(){
                     snackbar(getString(R.string.success_registration))
         })
 }
-
-
-
-
-
-
-
 
 }

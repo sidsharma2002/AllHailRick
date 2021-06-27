@@ -14,7 +14,8 @@ import com.example.celebtalks.data.entities.User
 class Useradapter  : RecyclerView.Adapter<Useradapter.UserViewHolder>(){
 
     class UserViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        val tvUsername: TextView = itemView.findViewById(R.id.tvUsername)
+        val tvType: TextView = itemView.findViewById(R.id.tvType)
+        val tvUid: TextView = itemView.findViewById(R.id.tvuid)
         }
 
     private val diffCallback = object : DiffUtil.ItemCallback<User>() {
@@ -50,8 +51,8 @@ class Useradapter  : RecyclerView.Adapter<Useradapter.UserViewHolder>(){
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val user = users[position]
         holder.apply {
-
-            tvUsername.text = user.username
+            tvUid.text = user.uid
+            tvType.text = user.type
             itemView.setOnClickListener {
                 onUserClickListener?.let { click ->
                     click(user)

@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_profile"
     tools:context=".ui.main.profile.ProfileFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="0dp">
+
+<androidx.core.widget.NestedScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="0dp">
@@ -19,7 +26,7 @@
         android:visibility="gone"
         android:indeterminateDrawable="@drawable/progressbar"
         android:layout_marginEnd="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvYourPosts"
+        app:layout_constraintBottom_toBottomOf="@+id/tvYourLogs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvProfileDescription" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvUsername"
+        android:id="@+id/tvType"
         android:text=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,17 +71,24 @@
         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/tvType" />
+
+    <View
+        app:layout_constraintTop_toBottomOf="@id/btnToggleFollow"
+        app:layout_constraintBottom_toTopOf="@id/tvYourLogs"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="?android:attr/listDivider"/>
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvYourPosts"
+        android:id="@+id/tvYourLogs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16sp"
-        android:layout_marginTop="20sp"
+        android:layout_marginTop="60sp"
         android:text="YOUR LOGS"
         android:fontFamily="@font/montserratextrabold"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textStyle="normal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnToggleFollow" />
@@ -99,12 +113,18 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         app:layout_goneMarginEnd="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/view_extraspace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvYourPosts"
+        app:layout_constraintTop_toBottomOf="@+id/tvYourLogs"
         tools:listitem="@layout/item_post" />
 
+    <TextView
+        android:id="@+id/view_extraspace"
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

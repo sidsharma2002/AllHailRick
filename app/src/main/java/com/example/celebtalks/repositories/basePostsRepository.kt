@@ -8,7 +8,6 @@ import com.example.celebtalks.other.safeCall
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import dagger.hilt.android.scopes.ActivityScoped
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -28,6 +27,7 @@ class basePostsRepository {
     suspend fun getPostsForProfile(uid: String) = withContext(Dispatchers.IO) {
         safeCall {
             Log.d(" basePostRepository ", " getPostsForProfile is called  ")
+            val Currentuid = FirebaseAuth.getInstance().uid!!
             // get Posts where authorUid is equal to uid
             val profilePosts = posts.whereEqualTo("authorUid", uid)
                 .orderBy("date", Query.Direction.DESCENDING)
@@ -37,8 +37,8 @@ class basePostsRepository {
                 .onEach { post ->
                     Log.d(" basepostRepository : getPostforProfile ", post.authorUid)
                     val user = getUser(post.authorUid).data!!
-                    post.authorUsername = user.username
-                    val  isLiked_init = post.likedBy.find { item -> item == uid}
+                    post.authorUsername = user.type
+                    val  isLiked_init = post.likedBy.find { item -> item == Currentuid}
                     post.isLiked = when (isLiked_init) {
                         null -> false
                         else -> true
@@ -51,33 +51,33 @@ class basePostsRepository {
     suspend fun searchUser(query: String) = withContext(Dispatchers.IO) {
         safeCall {
             val userResults =
-                users.whereGreaterThanOrEqualTo("username", query.toUpperCase(Locale.ROOT))
+                users.whereGreaterThanOrEqualTo("uid", query)
                     .get().await().toObjects(User::class.java)
             Resource.Success(userResults)
         }
     }
 
      suspend fun getPostsForFollows() = withContext(Dispatchers.IO) {
-        safeCall {
-            val uid = FirebaseAuth.getInstance().uid!!
-            val follows = getUser(uid).data!!.follows
-            val allPosts = posts.whereIn("authorUid", follows)
-                .orderBy("date", Query.Direction.DESCENDING)
-                .get()
-                .await()
-                .toObjects(Post::class.java)
-                .onEach { post ->
-                    val user = getUser(post.authorUid).data!!
-                    post.authorUsername = user.username
-                    val  isLiked_init = post.likedBy.find { item -> item == uid}
-                    post.isLiked = when (isLiked_init) {
-                        null -> false
-                        else -> true
-                    }
-                }
-            Resource.Success(allPosts)
-        }
-    }
+         safeCall {
+             val uid = FirebaseAuth.getInstance().uid!!
+             val follows = getUser(uid).data!!.follows
+             val allPosts = posts.whereIn("authorUid", follows)
+                 .orderBy("date", Query.Direction.DESCENDING)
+                 .get()
+                 .await()
+                 .toObjects(Post::class.java)
+                 .onEach { post ->
+                     val user = getUser(post.authorUid).data!!
+                     post.authorUsername = user.type
+                     val isLiked_init = post.likedBy.find { item -> item == uid }
+                     post.isLiked = when (isLiked_init) {
+                         null -> false
+                         else -> true
+                     }
+                 }
+             Resource.Success(allPosts)
+         }
+     }
 
      suspend fun toggleFollowForUser(uid: String) = withContext(Dispatchers.IO) {
         safeCall {
@@ -127,7 +127,7 @@ class basePostsRepository {
             val chunks = uids.chunked(10)
             val resultList = mutableListOf<User>()
             chunks.forEach { chunk ->
-                val usersList = users.whereIn("uid", uids).orderBy("username").get().await()
+                val usersList = users.whereIn("uid", uids).orderBy("type").get().await()
                     .toObjects(User::class.java)
                 resultList.addAll(usersList)
             }

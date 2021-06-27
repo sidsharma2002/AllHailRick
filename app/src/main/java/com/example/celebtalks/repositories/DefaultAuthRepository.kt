@@ -27,8 +27,9 @@ class DefaultAuthRepository : AuthRepository {
 
     override suspend fun register(
         email: String,
-        username: String,
-        password: String
+        type: String,
+        Planet : String,
+        password: String,
     ): Resource<AuthResult> {
         return withContext(Dispatchers.IO) {
             // safeCall will automatically perform below action or show error
@@ -36,8 +37,8 @@ class DefaultAuthRepository : AuthRepository {
                 val result = auth.createUserWithEmailAndPassword(email, password).await()
                 val uid = result.user?.uid!!
                 // Communicate with data
-                // create object of User with this uid and username
-                val user = User(uid, username)
+                // create object of User with this uid and type
+                val user = User(uid, type,Planet)
                 // add user to Firestore
                 users.document(uid).set(user).await()
                 Resource.Success(result)
