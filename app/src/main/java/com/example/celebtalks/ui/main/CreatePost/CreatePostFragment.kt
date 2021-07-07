@@ -33,6 +33,8 @@ class CreatePostFragment : Fragment() {
             ViewModelProvider(this).get(createPostViewModel::class.java)
         _binding = FragmentCreatepostBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        animateUI()
         subscribetoObservers()
 
             binding.btnPost.setOnClickListener {
@@ -42,8 +44,11 @@ class CreatePostFragment : Fragment() {
                 )
             }
 
-       slideUpViews(requireContext(), binding.etPostHeading, binding.etPostDescription, binding.btnPost)
         return root
+    }
+
+    private fun animateUI() {
+        //slideUpViews(requireContext(), binding.btnPost)
     }
 
     private fun subscribetoObservers() {

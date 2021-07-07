@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.celebtalks.R
 import com.example.celebtalks.adapters.Postadapter
+import com.example.celebtalks.data.pagingsource.ProfilePostsPagingSource
 import com.example.celebtalks.other.EventObserver
 import com.example.celebtalks.ui.main.Dialogs.DeletePostDialog
 import com.example.celebtalks.ui.snackbar
@@ -28,22 +29,16 @@ abstract class BasePostFragment(
 
     @Inject  lateinit var postAdapter : Postadapter
     // abstract variables
-    protected abstract val postProgressBar: ProgressBar
     protected abstract val basePostViewModel: basePostViewModel
     protected abstract val  allCaughtupView : ConstraintLayout?
     protected abstract val swipeRefreshLayout : SwipeRefreshLayout?
-
     private var curLikedIndex: Int? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeToObservers()
-        // Handle swipe refresh
-        handleonSwipeRefresh()
-        // Handle on click listeners
         handleOnClickListeners()
      }
-
 
     private fun handleOnClickListeners() {
         postAdapter.setOnLikeClickListener { post, i ->
@@ -63,28 +58,25 @@ abstract class BasePostFragment(
         }
     }
 
-
-    private fun handleonSwipeRefresh() {
-            swipeRefreshLayout?.setOnRefreshListener {
-                basePostViewModel.getPosts()
-            }
-    }
-
-
       private fun subscribeToObservers() {
-        Log.d("Basepost Fragment : ", "subscribeToObservers: ")
+
+          basePostViewModel.deletePostStatus.observe(viewLifecycleOwner, EventObserver(
+              onError = { snackbar(it) }
+          ) {
+              postAdapter.notifyDataSetChanged()
+          })
           // Observe like post status
           basePostViewModel.likePostStatus.observe(viewLifecycleOwner, EventObserver(
               onError = {
                   curLikedIndex?.let { index ->
-                      postAdapter.posts[index].isLiking = false
+                      postAdapter.peek(index)?.isLiking = false
                       postAdapter.notifyItemChanged(index)
                   }
                   snackbar(it)
               },
               onLoading = {
                   curLikedIndex?.let { index ->
-                      postAdapter.posts[index].isLiking = true
+                      postAdapter.peek(index)?.isLiking = true
                       postAdapter.notifyItemChanged(index)
                   }
               }
@@ -93,7 +85,7 @@ abstract class BasePostFragment(
               curLikedIndex?.let { index ->
                   val uid = FirebaseAuth.getInstance().uid!!
                   // change post liked by and liked at post[index]
-                  postAdapter.posts[index].apply {
+                  postAdapter.peek(index)?.apply {
                       this.isLiked = isLiked
                       isLiking = false
                       if(isLiked) {
@@ -105,32 +97,6 @@ abstract class BasePostFragment(
                   postAdapter.notifyItemChanged(index)
               }
           })
-
-          // Observe  delete post status
-          basePostViewModel.deletePostStatus.observe(viewLifecycleOwner, EventObserver(
-              onError = { snackbar(it) }
-          ) { deletedPost ->
-              postAdapter.posts -= deletedPost
-          })
-
-         // Observe Posts
-          basePostViewModel.posts.observe(viewLifecycleOwner, EventObserver(
-            onError = {
-                swipeRefreshLayout?.isRefreshing = false
-                snackbar(it)
-            },
-            onLoading = {
-                swipeRefreshLayout?.isRefreshing = true
-            }
-        ) { posts ->
-              swipeRefreshLayout?.isRefreshing = false
-              if(postAdapter.posts == posts){
-                  allCaughtupView?.isVisible = true
-              }
-              else {
-                  allCaughtupView?.visibility = View.GONE
-                  postAdapter.posts = posts
-              }
-        })
     }
+
 }

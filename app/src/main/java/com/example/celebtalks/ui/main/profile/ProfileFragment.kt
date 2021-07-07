@@ -10,6 +10,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.celebtalks.R
@@ -20,6 +22,10 @@ import com.example.celebtalks.ui.main.Base_Classes.basePostViewModel
 import com.example.celebtalks.ui.snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 open class ProfileFragment : BasePostFragment(R.id.fragment_profile) {
@@ -30,10 +36,6 @@ open class ProfileFragment : BasePostFragment(R.id.fragment_profile) {
     // This property is only valid between onCreateView and
     // onDestroyView.
       val binding get() = _binding!!
-
-    override val postProgressBar : ProgressBar
-    // set ProgressBar equal to this progressbar
-    get() = binding.profileMetaProgressBar
 
     override val basePostViewModel: basePostViewModel
         get() {
@@ -71,7 +73,25 @@ open class ProfileFragment : BasePostFragment(R.id.fragment_profile) {
         binding.btnToggleFollow.isVisible = false
         viewModel.loadProfile(uid)
 
+        handlePagination()
         return root
+    }
+
+
+    private fun handlePagination() {
+        lifecycleScope.launch {
+            viewModel.getPagingFlow(uid).collect {
+                    postAdapter.submitData(it)
+            }
+        }
+
+        lifecycleScope.launch {
+            postAdapter.loadStateFlow.collectLatest {
+                    // TODO(" chech progressbar visibility in  UI")
+                    binding.profileMetaProgressBar.isVisible = it.refresh is LoadState.Loading ||
+                        it.append is LoadState.Loading
+            }
+        }
     }
 
     private fun setupRecyclerView() = binding.rvPosts.apply {
@@ -81,7 +101,7 @@ open class ProfileFragment : BasePostFragment(R.id.fragment_profile) {
     }
 
     private fun subscribeToObservers() {
-        Log.d("ProfileFragment : ", "subscribeToObservers: ")
+
         viewModel.profileMeta.observe(viewLifecycleOwner, EventObserver(
             onError = {
                 swipeRefreshLayout?.isRefreshing = false
@@ -90,12 +110,8 @@ open class ProfileFragment : BasePostFragment(R.id.fragment_profile) {
             onLoading = { }
         ) { user ->
 
-            Log.d("Log message ", "in on success ")
             binding.tvType.text = user.type
-            Log.d("type after setting is ", binding.tvType.text.toString())
-            binding.tvProfileDescription.text = if(user.description.isEmpty()) {
-                requireContext().getString(R.string.no_description)
-            } else user.description
+            binding.tvProfileUid.text = user.uid
         })
     }
 

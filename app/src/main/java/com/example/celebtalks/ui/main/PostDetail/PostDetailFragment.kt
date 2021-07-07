@@ -9,7 +9,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import com.example.celebtalks.databinding.FragmentHomeBinding
 import com.example.celebtalks.databinding.FragmentPostdetailBinding
-import com.example.celebtalks.ui.main.home.HomeViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint

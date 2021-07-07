@@ -13,7 +13,9 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,12 +30,14 @@ import com.example.celebtalks.ui.snackbar
 import com.example.celebtalks.utils.SwipeToDeleteCallback
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 // Inherit from BasePostFragment
 @AndroidEntryPoint
 class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
     private var _binding: FragmentDashboardBinding? = null
     private lateinit var itemTouchHelper: ItemTouchHelper
 
@@ -45,14 +49,14 @@ class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
     override val swipeRefreshLayout: SwipeRefreshLayout
         get() = binding.fragmentDashboard
 
-    override val postProgressBar : ProgressBar
-        get() = binding.allPostsProgressBar
-
     override val basePostViewModel: basePostViewModel
         get() {
             val vm: DashboardViewModel by viewModels()
             return vm
         }
+
+    private val dashboardViewModel : DashboardViewModel by lazy { basePostViewModel as DashboardViewModel }
+    //private lateinit var dashboardViewModel : DashboardViewModel
 
     override val allCaughtupView: ConstraintLayout
         get() = binding.viewAllcaughtup
@@ -63,16 +67,38 @@ class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
         savedInstanceState: Bundle?
     ): View {
 
-        dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
+       // dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
+
          _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        // setup RecyclerView and onSwipeListeners
+        // setup RecyclerView
         setupRecyclerView()
-        // when CreatePost Button is  clicked
+        handlePagination()
+        handleOnSwipeRefresh()
         setupClickListeners()
         return root
         }
+
+    private fun handlePagination() {
+        lifecycleScope.launch {
+            dashboardViewModel.pagingFlow.collect{
+                postAdapter.submitData(it)
+            }
+        }
+
+        lifecycleScope.launch {
+            postAdapter.loadStateFlow.collectLatest {
+                swipeRefreshLayout.isRefreshing = it.refresh is LoadState.Loading ||
+                        it.append is LoadState.Loading
+            }
+        }
+    }
+
+    private fun handleOnSwipeRefresh() {
+        swipeRefreshLayout.setOnRefreshListener {
+                    handlePagination()
+            }
+    }
 
     private fun setupClickListeners() {
         // searchbar ClickListener
@@ -87,15 +113,6 @@ class DashboardFragment : BasePostFragment(R.id.fragment_dashboard) {
         layoutManager = LinearLayoutManager(requireContext())
         // creates a glitch if item updates when not set to null
         itemAnimator = null
-
-        // Test feature
-        val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            }
-        }
-        itemTouchHelper = ItemTouchHelper(swipeHandler)
-        // uncomment this for swipe feature
-        // itemTouchHelper.attachToRecyclerView(this)
     }
 
     override fun onDestroyView() {

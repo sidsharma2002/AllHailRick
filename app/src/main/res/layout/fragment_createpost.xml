@@ -4,61 +4,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent" android:layout_width="match_parent"
-    tools:context=".ui.main.CreatePost.CreatePostFragment">
+    tools:context=".ui.main.CreatePost.CreatePostFragment"
+    android:nestedScrollingEnabled="false">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="20sp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPostText"
-        android:layout_marginTop="0sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="10dp"
-        app:boxBackgroundMode="none">
-
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etPostHeading"
-            android:background="@null"
-            android:textAllCaps="true"
+            android:backgroundTint="@color/black_dark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4sp"
+            android:layout_margin="12sp"
             android:hint="Title"
-            android:fontFamily="sans-serif"
+            android:fontFamily="@font/opensanssemibold"
             android:textSize="18sp"
-            android:inputType="textShortMessage"
             android:maxLength="70"
             android:maxLines="2"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            app:layout_constraintTop_toTopOf="@+id/etPostHeading"
+            app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="-1dp" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPostText1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:boxBackgroundMode="none"
-        app:layout_constraintTop_toBottomOf="@+id/tilPostText">
-
-    <com.google.android.material.textfield.TextInputEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etPostDescription"
-        android:background="@null"
-        android:layout_marginEnd="5sp"
+        android:backgroundTint="@color/black_dark"
+        android:layout_marginEnd="8sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4sp"
+        android:layout_marginStart="12sp"
+        android:layout_marginTop="4sp"
         android:lineSpacingExtra="4sp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:hint="Body"
         android:textSize="16sp"
         android:inputType="textMultiLine"
-        tools:layout_editor_absoluteX="-1dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+        tools:layout_editor_absoluteX="-1dp"
+        app:layout_constraintTop_toBottomOf="@id/etPostHeading"/>
 
     <ProgressBar
         android:id="@+id/createPostProgressBar"
@@ -66,10 +49,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:visibility="gone"
-        android:indeterminateDrawable="@drawable/progressbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tilPostText" />
+        app:layout_constraintTop_toBottomOf="@id/etPostDescription" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnPost"
@@ -78,13 +60,17 @@
         android:text="deploy!"
         android:backgroundTint="?attr/colorPrimary"
         android:layout_marginTop="22sp"
-        android:layout_marginEnd="36dp"
         app:cornerRadius="16sp"
+        android:paddingStart="60sp"
+        android:paddingEnd="60sp"
+        android:layout_marginBottom="100sp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tilPostText1"/>
+        app:layout_constraintTop_toBottomOf="@id/createPostProgressBar"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 <View
     android:layout_width="match_parent"
-    android:layout_height="100sp"
+    android:layout_height="0sp"
     app:layout_constraintTop_toBottomOf="@id/btnPost"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

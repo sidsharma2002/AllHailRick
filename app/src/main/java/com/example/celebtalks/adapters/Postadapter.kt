@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +16,7 @@ import com.example.celebtalks.data.entities.Post
 import com.google.firebase.auth.FirebaseAuth
 
 
-class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
+class Postadapter () : PagingDataAdapter<Post, Postadapter.PostViewHolder>(Companion){
 
     // TODO( "use base adapter" )
     // PostViewHolder Class for optimisation
@@ -31,7 +32,7 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
         val viewtype : TextView = itemView.findViewById(R.id.view_type)
     }
     // DiffUtil
-    private val diffCallback = object : DiffUtil.ItemCallback<Post>() {
+    companion object : DiffUtil.ItemCallback<Post>() {
         override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
         }
@@ -40,11 +41,6 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
             return oldItem.id == newItem.id
         }
     }
-    private val differ = AsyncListDiffer(this, diffCallback)
-
-    var posts: List<Post>
-        get() = differ.currentList
-        set(value) = differ.submitList(value)
 
     // return PostViewHolder item which is made by passing itemView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : PostViewHolder {
@@ -58,13 +54,8 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
         )
     }
 
-    override fun getItemCount(): Int {
-        Log.d("ProfileAdapter postsize is  : ", posts.size.toString() )
-        return posts.size
-    }
-
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val post = posts[position]
+        val post  = getItem(position) ?: return
         Log.d("ProfileAdapter : ", "in onBindViewHolder ")
         holder.apply {
             tvPostText.text = post.body
@@ -81,6 +72,7 @@ class Postadapter () : RecyclerView.Adapter<Postadapter.PostViewHolder>(){
             // if post's ui is equal to uid of current user
             // then show  Delete post button
             ibDeletePost.isVisible = uid == post.authorUid
+            viewtype.text = post.authorUsername[0].toString().uppercase()
             // Change drawable according to liked status
             shapeisLiked.visibility = when(post.isLiked){
                 true -> View.VISIBLE
